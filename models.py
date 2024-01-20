@@ -5,6 +5,9 @@ import json
 client = OpenAI()
 
 class Model:
+    """
+    Base model class for handling responses from GPT models.
+    """
     def __init__():
         pass
     
@@ -41,6 +44,9 @@ class Model:
             return json_response
         
 class VisionModel(Model):
+    """
+    A model class for handling vision-related tasks with GPT models.
+    """
     def __init__(self):
         self.model_name = "gpt-4-vision-preview"
     
@@ -73,7 +79,21 @@ class VisionModel(Model):
             return chat_response
 
 class CompareGPT(VisionModel):
+    """
+    A class to compare two UI screenshots using GPT models.
+    """
     def get_comparison_message(self, source_image_src, target_image_src, detail=None):
+        """
+        Prepares the message payload for comparing two UI screenshots.
+
+        Args:
+            source_image_src (str): URL or base64 string of the source image.
+            target_image_src (str): URL or base64 string of the target image.
+            detail (str, optional): Level of detail for the comparison.
+
+        Returns:
+            list: A list of messages to be sent to the GPT model.
+        """
         # Render the system and text dictionaries
         system = {"role": "system", "content": prompts.comp_vision_system_string}
         text = {"type": "text", "text": prompts.comp_vision_prompt_string}
@@ -102,7 +122,20 @@ class CompareGPT(VisionModel):
         return self.gpt_call(message)
     
 class EvalGPT(VisionModel):
+    """
+    A class to evaluate a UI screenshot based on standard UI principles.
+    """
     def get_standard_message(self, image, detail=None):
+        """
+        Prepares the message payload for evaluating a UI screenshot.
+
+        Args:
+            image (str): The image to be evaluated.
+            detail (str, optional): Level of detail for the evaluation.
+
+        Returns:
+            list: A list of messages to be sent to the GPT model.
+        """
         # Render the system and text dictionaries
         system = {"role": "system", "content": prompts.ui_evaluation_system_string}
         text = {"type": "text", "text": prompts.ui_evaluation_prompt_string}
@@ -125,7 +158,21 @@ class EvalGPT(VisionModel):
         return self.gpt_call(message)
     
 class UserEvalGPT(VisionModel):
+    """
+    A class to evaluate a UI screenshot based on user-defined priorities.
+    """
     def get_custom_message(self, image, priorities, detail=None):
+        """
+        Prepares the message payload for evaluating a UI screenshot based on user-defined priorities.
+
+        Args:
+            image (str): The image to be evaluated.
+            priorities (list): A list of user-defined priorities for the evaluation.
+            detail (str, optional): Level of detail for the evaluation.
+
+        Returns:
+            list: A list of messages to be sent to the GPT model.
+        """
         # Render the system and text dictionaries
         system = {"role": "system", "content": prompts.vision_system_string}
         text = {"type": "text", "text": prompts.vision_prompt_string.format(priorities)}
