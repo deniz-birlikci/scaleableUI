@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="center-container">
+        <h2 class="title">Cross Platform Validator</h2>
+
+        <!-- URL INPUT -->
+        <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text">https://</span>
+              <input type="text" class="form-control" id="url" aria-describedby="basic-addon3 basic-addon4" value="www.batchgpt.co">
+            </div>
+        </div>
+
+        <!-- Add Field -->
+        <div class="row g-3">
+            <div class="col-sm-4">
+                <select class="form-select" id="browser" aria-label="Default select example" required>
+                    <option value="Chrome" selected>Chrome</option>
+                    <option value="Firefox">Firefox</option>
+                    <option value="Safari">Safari</option>
+                </select>
+            </div>
+            <div class="col-3">
+              <!-- select -->
+              <select class="form-select" id="width" aria-label="Default select example" required>
+                <option value="400" selected>400</option>
+                <option value="600">600</option>
+                <option value="800">800</option>
+                <option value="1000">1000</option>
+                <option value="1200">1200</option>
+                <option value="1500">1500</option>
+                <option value="1900">1900</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <!-- select -->
+                <select class="form-select" id="height" aria-label="Default select example" required>
+                    <option value="400" selected>400</option>
+                    <option value="600">600</option>
+                    <option value="800">800</option>
+                    <option value="1000">1000</option>
+                    <option value="1200">1200</option>
+                    <option value="1500">1500</option>
+                    <option value="1900">1900</option>
+                </select>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-light" onclick="add_to_table()">Add</button>
+            </div>
+          </div>
+
+        <!-- View -->
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Browser</th>
+                <th scope="col">Width</th>
+                <th scope="col">Height</th>
+                <th scope="col">Navigation</th>
+                <th scope="col">Aesthetics</th>
+                <th scope="col">Usability</th>
+                <th scope="col">Consistency</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tab">
+
+            </tbody>
+          </table>
+          
+        <div id="popover" class="hidden"></div>
+        <div class="validate-btn">
+            <button type="button" class="btn btn-success" id="validate" onclick="send_data()">Validate</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
