@@ -81,7 +81,7 @@ class VisionModel(Model):
         image_dict = {"type": "image_url", "image_url": image_url}
         return image_dict
     
-    def gpt_call(self, messages, json_output=True):
+    def gpt_call(self, messages, validator=None, json_output=True):
         print(messages)
         # Runs the visual critique component
         vision_response = client.chat.completions.create(
@@ -93,10 +93,13 @@ class VisionModel(Model):
         print(chat_response)
         
         if json_output:
-            try:
-                return self.response_to_json(chat_response)
-            except:
+            json_response = self.response_to_json(chat_response)
+            # If we have a validator and we have failed it, return the chat
+            if validator and not validator(json_response):
                 return {"error": chat_response}
+            # Otherwise, return the json response
+            else:
+                return json_response
         else:
             return chat_response
 
@@ -138,10 +141,18 @@ class CompareGPT(VisionModel):
         
         # Return the messages
         return messages
+    
+    def validator(self, output):
+        return (
+            isinstance(output, dict)
+            and ("score" in output)
+            and ("feedback" in output)
+            and isinstance(output['feedback'], list)
+        )
 
     def forward(self, source_image_src, target_image_src, detail="high"):
         message = self.get_comparison_message(source_image_src, target_image_src, detail=detail)
-        return self.gpt_call(message)
+        return self.gpt_call(message, validator=self.validator)
     
 class EvalGPT(VisionModel):
     """
@@ -176,9 +187,18 @@ class EvalGPT(VisionModel):
         # Return the messages
         return messages
     
+    def validator(self, output):
+        return (
+            isinstance(output, dict)
+            and ("Navigation" in output)
+            and (len(output['Navigation']) == 2)
+            and isinstance(output['Navigation'][0], int)
+            and isinstance(output['Navigation'][1], str)
+        )
+    
     def forward(self, image_src, detail="high"):
         message = self.get_standard_message(image_src, detail=detail)
-        return self.gpt_call(message)
+        return self.gpt_call(message, validator=self.validator)
     
 class UserEvalGPT(VisionModel):
     """
