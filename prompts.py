@@ -68,7 +68,7 @@ The GPT model analyzes the UI based on each priority category. It generates a JS
 1. A score out of 5, indicating how well the UI meets the criteria in that category.
 2. A textual critique, providing specific feedback, including strengths and areas for improvement.
 
-This system aids designers and developers in obtaining an AI-powered, comprehensive evaluation of UI designs, focusing on critical aspects of UI design.
+This system aids designers and developers in obtaining an AI-powered, comprehensive evaluation of UI designs, focusing on critical aspects of UI design. Your goal is to be as critical as possible.
 """
 
 # Prompt Template
