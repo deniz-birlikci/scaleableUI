@@ -31,7 +31,7 @@ def scrape_list(url, configurations):
         driver.quit()
         print(f'Uploaded {driver.name}_{size[0]}_{size[1]}.png')
 
-    return filepaths
+    return ['https://s3.us-west-1.wasabisys.com/hackathon/' + f for f in filepaths]
 
 
 

@@ -37,10 +37,12 @@ function add_to_table(defaults=false) {
     button.classList.add('btn', 'btn-light'); // Add classes to the button
     button.onclick = function() {
         // set modal-img's src to browser_width_height.png
-        // data-bs-toggle="modal" data-bs-target="#exampleModal"
         var modal_img = document.getElementById('modal-img');
-        modal_img.src = '/static/img/' + browserValue + '_' + widthValue + '_' + heightValue + '.png';
+        modal_img.src = 'https://s3.us-west-1.wasabisys.com/hackathon/' + browserValue.toLowerCase() + '_' + widthValue + '_' + heightValue + '.png';
     };
+    // data-bs-toggle="modal" data-bs-target="#exampleModal"
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#exampleModal');
 
     // delete button
     var delete_button = document.createElement('button');
@@ -93,8 +95,8 @@ function send_data() {
     })
     .then(response => response.json())
     .then(responseData => {
-        for (let i = 0; i < responseData.data.length; i++) {
-            let status = responseData.data[i];
+        for (let i = 0; i < responseData.length; i++) {
+            let status = responseData[i];
             let row = table.rows[i]; // Adjust for header row
     
             // Update the row based on the response
