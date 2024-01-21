@@ -81,7 +81,7 @@ class VisionModel(Model):
         image_dict = {"type": "image_url", "image_url": image_url}
         return image_dict
     
-    def gpt_call(self, messages, validator=None, json_output=True):
+    def gpt_call(self, messages, validator=None, json_output=True, error_fn=None):
         print(messages)
         # Runs the visual critique component
         vision_response = client.chat.completions.create(
@@ -96,7 +96,10 @@ class VisionModel(Model):
             json_response = self.response_to_json(chat_response)
             # If we have a validator and we have failed it, return the chat
             if validator and not validator(json_response):
-                return {"error": chat_response}
+                if error_fn:
+                    return error_fn(chat_response)
+                else:
+                    return {"error": chat_response}
             # Otherwise, return the json response
             else:
                 return json_response
@@ -149,10 +152,16 @@ class CompareGPT(VisionModel):
             and ("feedback" in output)
             and isinstance(output['feedback'], list)
         )
+        
+    def format_error_response(self, chat_response):
+        return {
+            "score": 0,
+            "feedback": [chat_response]
+        }
 
     def forward(self, source_image_src, target_image_src, detail="high"):
         message = self.get_comparison_message(source_image_src, target_image_src, detail=detail)
-        return self.gpt_call(message, validator=self.validator)
+        return self.gpt_call(message, validator=self.validator, error_fn=self.format_error_response)
     
 class EvalGPT(VisionModel):
     """
@@ -195,10 +204,18 @@ class EvalGPT(VisionModel):
             and isinstance(output['Navigation'][0], int)
             and isinstance(output['Navigation'][1], str)
         )
+        
+    def format_error_response(self, chat_response):
+        return {
+            "Navigation" : [0, chat_response],
+            "Aesthetics" : [0, chat_response],
+            "Usability" : [0, chat_response],
+            "Consistency" : [0, chat_response],
+        }
     
     def forward(self, image_src, detail="high"):
         message = self.get_standard_message(image_src, detail=detail)
-        return self.gpt_call(message, validator=self.validator)
+        return self.gpt_call(message, validator=self.validator, error_fn=self.format_error_response)
     
 class UserEvalGPT(VisionModel):
     """
