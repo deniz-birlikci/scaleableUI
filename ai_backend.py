@@ -17,10 +17,10 @@ def main(list_of_urls):
         
     # Second, taking in the 0th element in the array as the source
     # image, do pairwise comparison between the 0th element and the rest
-    comparisons = []
-    source_image_url = list_of_urls[0]
-    for target_image_url in list_of_urls[1:]:
-        critique = compare_urls(source_image_url, target_image_url)
-        comparisons.append(critique)
+    # comparisons = []
+    # source_image_url = list_of_urls[0]
+    # for target_image_url in list_of_urls[1:]:
+    #     critique = compare_urls(source_image_url, target_image_url)
+    #     comparisons.append(critique)
         
-    return evaluation, comparisons
+    return evaluation #,comparisons
