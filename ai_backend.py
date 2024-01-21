@@ -1,4 +1,5 @@
 import models
+from tqdm import tqdm
 
 def evaluate_url(image_url):
     eval_model = models.EvalGPT()
@@ -11,7 +12,7 @@ def compare_urls(source, target):
 def main(list_of_urls):
     # First, generate the evaluation on all the urls
     evaluation = []
-    for image_url in list_of_urls:
+    for image_url in tqdm(list_of_urls, leave=False):
         critique = evaluate_url(image_url)
         evaluation.append(critique)
         
