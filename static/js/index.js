@@ -35,6 +35,12 @@ function add_to_table(defaults=false) {
     var button = document.createElement('button');
     button.innerHTML = 'View'; // or any text you want on the button
     button.classList.add('btn', 'btn-light'); // Add classes to the button
+    button.onclick = function() {
+        // set modal-img's src to browser_width_height.png
+        // data-bs-toggle="modal" data-bs-target="#exampleModal"
+        var modal_img = document.getElementById('modal-img');
+        modal_img.src = '/static/img/' + browserValue + '_' + widthValue + '_' + heightValue + '.png';
+    };
 
     // delete button
     var delete_button = document.createElement('button');
